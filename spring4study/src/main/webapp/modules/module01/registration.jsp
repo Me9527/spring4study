@@ -7,6 +7,9 @@
 
     <!-- Shared -->
     <link rel="stylesheet" type="text/css" href="../shared/example.css" />
+    <script type="text/javascript">
+    	var url = ctx + "/actionTwo.do?${_csrf.parameterName}=${_csrf.token}";
+    </script>
     <script type="text/javascript" src="registration.js"></script>
     
     <!-- GC -->
@@ -37,6 +40,8 @@
     </style>
 </head>
 <body>
-
+    <script type="text/javascript">
+    	//alert(url);
+    </script>
 </body>
 </html>

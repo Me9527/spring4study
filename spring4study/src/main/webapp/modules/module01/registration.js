@@ -150,7 +150,6 @@ Ext.onReady(function() {
                 width: 140,
                 handler: function() {
                     var form = this.up('form').getForm();
-                    var url = ctx + "/actionTwo.do";
                     form.submit({
                         clientValidation: true,
                         url: url,
