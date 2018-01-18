@@ -59,13 +59,7 @@ Ext.onReady(function() {
             name: 'username',
             fieldLabel: '用户名',
             allowBlank: false,
-            minLength: 6
-        }, {
-            xtype: 'textfield',
-            name: 'email',
-            fieldLabel: 'Email',
-            vtype: 'email',
-            allowBlank: true
+            minLength: 3
         }, {
             xtype: 'textfield',
             name: 'password1',
@@ -73,7 +67,7 @@ Ext.onReady(function() {
             inputType: 'password',
             style: 'margin-top:15px',
             allowBlank: true,
-            minLength: 8
+            minLength: 1
         }, {
             xtype: 'textfield',
             name: 'password2',
