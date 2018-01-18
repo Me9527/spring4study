@@ -10,7 +10,10 @@
             http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security.xsd"
 	default-autowire="byName" default-lazy-init="true">
 	
-	
+
+	<global-method-security pre-post-annotations="enabled" />
+
+	<http pattern="/static/**" security="none"/>
 	<http pattern="/commons/**" security="none"/>
 	<http pattern="/ext4.1/**" security="none"/>
 	<http pattern="/loggedout.jsp" security="none"/>	
@@ -18,19 +21,20 @@
 	<http>
 		<intercept-url pattern="*.do" access="hasAuthority('supervisor')"/>
 		<intercept-url pattern="/secure/**" access="authenticated" />
-		<intercept-url pattern="/modules/**" access="authenticated" />		
+		<intercept-url pattern="/modules/**" access="hasAuthority('supervisor')" />		
 		<!--
 			Allow all other requests. In a real application you should
 			adopt a whitelisting approach where access is not allowed by default
+		<intercept-url pattern="/**" access="permitAll" />			
 		-->
-		<intercept-url pattern="/**" access="permitAll" />
+
 		<form-login />
-		<logout logout-success-url="/loggedout.jsp" delete-cookies="JSESSIONID"/>
+		<logout logout-url="/logout" logout-success-url="/loggedout.jsp" delete-cookies="JSESSIONID"/>
 		<remember-me />
 		
 		<!-- Uncomment to limit the number of sessions a user can have -->
 		<session-management invalid-session-url="/timeout.jsp">
-			<concurrency-control max-sessions="1" error-if-maximum-exceeded="true" />
+			<concurrency-control max-sessions="5" error-if-maximum-exceeded="true" />
 		</session-management>
 
 	</http>
