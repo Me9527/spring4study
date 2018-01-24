@@ -4,14 +4,14 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
-import org.example.module02.services.IBizTwo;
+import org.example.users.services.IUserService;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Service;
 
 // @Component、@Repository、@Service
-@Service("bizTwo")
-public class UserServiceImpl implements IBizTwo {
+@Service("userService")
+public class UserServiceImpl implements IUserService {
 
 	private JdbcTemplate jdbcTemplate;
 	private NamedParameterJdbcTemplate namedParameterJdbcTemplate;

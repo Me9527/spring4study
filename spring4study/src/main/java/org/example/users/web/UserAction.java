@@ -11,8 +11,8 @@ public class UserAction {
 
 	private IUserService userService;
 
-	@RequestMapping("/actionTwo.do")
-	public String actionTwo(@RequestParam(value = "username", required = false, defaultValue = "钟馗") String username,
+	@RequestMapping("/getAllUser.do")
+	public String getAllUser(@RequestParam(value = "username", required = false, defaultValue = "钟馗") String username,
 			Model model) {
 
 		/*
@@ -24,7 +24,7 @@ public class UserAction {
 		 */
 		return "page02";
 	}
-
+	
 	public IUserService getUserService() {
 		return userService;
 	}
