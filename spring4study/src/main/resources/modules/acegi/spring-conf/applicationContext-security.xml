@@ -16,10 +16,10 @@
 	<http pattern="/static/**" security="none"/>
 	<http pattern="/commons/**" security="none"/>
 	<http pattern="/ext4.1/**" security="none"/>
-	<http pattern="/loggedout.jsp" security="none"/>	
+	<http pattern="/logout.jsp" security="none"/>	
 
 	<http>
-		<intercept-url pattern="*.do" access="hasAuthority('supervisor')"/>
+		<intercept-url pattern="*.do" requires-channel="any" access="hasAuthority('supervisor')"/>
 		<intercept-url pattern="/secure/**" access="authenticated" />
 		<intercept-url pattern="/modules/**" access="hasAuthority('supervisor')" />		
 		<!--
@@ -28,7 +28,7 @@
 		<intercept-url pattern="/**" access="permitAll" />			
 		-->
 
-		<form-login />
+		<form-login login-page="/login.jsp"/>
 		<logout logout-url="/logout" logout-success-url="/loggedout.jsp" delete-cookies="JSESSIONID"/>
 		<remember-me />
 		
@@ -36,7 +36,10 @@
 		<session-management invalid-session-url="/timeout.jsp">
 			<concurrency-control max-sessions="5" error-if-maximum-exceeded="true" />
 		</session-management>
-
+		
+		<port-mappings>
+			<port-mapping http="8000" https="443"/>
+		</port-mappings>
 	</http>
 
 	<beans:bean id="encoder" class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder"/>

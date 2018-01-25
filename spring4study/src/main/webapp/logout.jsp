@@ -8,9 +8,9 @@
   </head>
 <body>
 <div id="content">
-<h2>Logged Out</h2>
+<h2>退出登录</h2>
 <p>
-You have been logged out. 
+退出登录
 </p>
 </div>
 </body>
