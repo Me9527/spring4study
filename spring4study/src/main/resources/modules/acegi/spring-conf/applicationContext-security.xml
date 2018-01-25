@@ -16,24 +16,28 @@
 	<http pattern="/static/**" security="none"/>
 	<http pattern="/commons/**" security="none"/>
 	<http pattern="/ext4.1/**" security="none"/>
-	<http pattern="/logout.jsp" security="none"/>	
 
 	<http>
+		<form-login login-page="/modules/user/login.jsp" authentication-failure-url="/modules/user/login.jsp" login-processing-url="/modules/user/login"/>
+		<logout logout-url="/modules/user/logout" logout-success-url="/modules/user/logout.jsp" delete-cookies="JSESSIONID"/>
+		
+		<intercept-url pattern="/modules/user/login.jsp" access="permitAll" />	
+		<intercept-url pattern="/modules/user/logout.jsp" access="permitAll" />			
 		<intercept-url pattern="*.do" requires-channel="any" access="hasAuthority('supervisor')"/>
+		<intercept-url pattern="/modules/**" access="hasAuthority('supervisor')" />	
+				
 		<intercept-url pattern="/secure/**" access="authenticated" />
-		<intercept-url pattern="/modules/**" access="hasAuthority('supervisor')" />		
+	
 		<!--
 			Allow all other requests. In a real application you should
 			adopt a whitelisting approach where access is not allowed by default
 		<intercept-url pattern="/**" access="permitAll" />			
 		-->
-
-		<form-login login-page="/login.jsp" authentication-failure-url="/login.jsp" login-processing-url="/login"/>
-		<logout logout-url="/logout" logout-success-url="/loggedout.jsp" delete-cookies="JSESSIONID"/>
+		
 		<remember-me />
 		
 		<!-- Uncomment to limit the number of sessions a user can have -->
-		<session-management invalid-session-url="/timeout.jsp">
+		<session-management invalid-session-url="/modules/user/timeout.jsp">
 			<concurrency-control max-sessions="5" error-if-maximum-exceeded="true" />
 		</session-management>
 		

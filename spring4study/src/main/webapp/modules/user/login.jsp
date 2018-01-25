@@ -8,7 +8,7 @@
 </head>
 <body onload='document.f.username.focus();'>
 	<h3> 用户登录信息 </h3>
-	<form name='f' action='${ctx}/login' method='POST'>
+	<form name='f' action='${ctx}/modules/user/login' method='POST'>
 		<table>
 			<tr>
 				<td>用户名:</td>
