@@ -25,7 +25,8 @@
 		<intercept-url pattern="/modules/user/logout.jsp" access="permitAll" />			
 		<intercept-url pattern="*.do" requires-channel="any" access="hasAuthority('supervisor')"/>
 		<intercept-url pattern="/modules/**" access="hasAuthority('supervisor')" />	
-				
+		<intercept-url pattern="/webservice/**" access="hasAuthority('supervisor')" />	
+						
 		<intercept-url pattern="/secure/**" access="authenticated" />
 	
 		<!--

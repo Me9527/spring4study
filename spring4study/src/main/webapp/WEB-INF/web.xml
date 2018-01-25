@@ -74,7 +74,11 @@
 		<filter-name>springSecurityFilterChain</filter-name>
 		<url-pattern>/modules/*</url-pattern>
 	</filter-mapping>
-	
+	<filter-mapping>
+		<filter-name>springSecurityFilterChain</filter-name>
+		<url-pattern>/webservice/*</url-pattern>
+	</filter-mapping>
+		
 	<servlet-mapping>
 		<servlet-name>Spring_Web_MVC_Controller</servlet-name>
 		<url-pattern>*.do</url-pattern>
