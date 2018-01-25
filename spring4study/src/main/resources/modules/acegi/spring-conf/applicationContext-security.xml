@@ -50,16 +50,11 @@
 	<beans:bean id="encoder" class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder"/>
 
 	<authentication-manager>
-		<authentication-provider>
+		<authentication-provider user-service-ref='custUserDetailService'>
 			<password-encoder ref="encoder"/>
-			<user-service>
-				<user name="rod" password="$2a$10$EblZqNptyYvcLm/VwDCVAuBjzZOI7khzdyGPBr08PpIi0na624b8." authorities="supervisor, user, teller" />
-				<user name="mike" password="$2a$10$EblZqNptyYvcLm/VwDCVAuBjzZOI7khzdyGPBr08PpIi0na624b8." authorities="user,teller" />
-				<user name="scott" password="$2a$06$eChwvzAu3TSexnC3ynw4LOSw1qiEbtNItNeYv5uI40w1i3paoSfLu" authorities="user" />
-				<user name="user" password="$2a$10$EblZqNptyYvcLm/VwDCVAuBjzZOI7khzdyGPBr08PpIi0na624b8." authorities="ROLE_USER" />
-				<user name="admin" password="$2a$10$EblZqNptyYvcLm/VwDCVAuBjzZOI7khzdyGPBr08PpIi0na624b8." authorities="supervisor, user, teller"/>				
-			</user-service>
 		</authentication-provider>
 	</authentication-manager>
+
+
 		
 </beans:beans>

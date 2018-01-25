@@ -17,5 +17,8 @@ create table USERS
 );
 
 
-
+create table authorities (
+	LOGINNAME VARCHAR(128) not null,
+	authority VARCHAR(128) not null
+);
 
