@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:context="http://www.springframework.org/schema/context" xmlns:aop="http://www.springframework.org/schema/aop" 
+	xmlns:cache="http://www.springframework.org/schema/cache" xmlns:util="http://www.springframework.org/schema/util"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.3.xsd  
+            http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.3.xsd  
+            http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd  
+            http://www.springframework.org/schema/cache http://www.springframework.org/schema/cache/spring-cache-4.3.xsd  
+            http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-4.3.xsd"
+	default-autowire="byName" default-lazy-init="true">
+
+	<bean id="mySecurityFilterChainProxy" class="org.springframework.security.web.FilterChainProxy">
+		<constructor-arg>
+			<list>
+			 	<ref bean="defaultSecurityFilterChain" />
+			</list>
+		</constructor-arg>
+	</bean>
+
+	<bean id="defaultSecurityFilterChain" class="org.springframework.security.web.DefaultSecurityFilterChain">
+		<constructor-arg index="0">
+			<ref bean="antPathRequestMatcher" />
+		</constructor-arg>
+		<constructor-arg index="1">
+			<list>
+				<ref bean="securityContextPersistenceFilter" />
+				<ref bean="concurrentSessionFilter" />			
+				<ref bean="csrfFilter" />
+				<ref bean="logoutFilter" />
+				<ref bean="usernamePasswordAuthenticationFilter" />					
+													
+			</list>
+		</constructor-arg>
+	</bean>
+
+	<bean id="antPathRequestMatcher" class="org.springframework.security.web.util.matcher.AntPathRequestMatcher">
+		<constructor-arg index="0">
+			<value>/modules/**</value>
+		</constructor-arg>
+	</bean>
+
+	<bean id="channelProcessingFilter" class="org.springframework.security.web.access.channel.ChannelProcessingFilter">
+	
+	</bean>
+	<bean id="channelDecisionManager" class="org.springframework.security.web.access.channel.ChannelDecisionManagerImpl">
+		
+	</bean>
+		
+	<bean id="securityContextPersistenceFilter" class="org.springframework.security.web.context.SecurityContextPersistenceFilter">
+	
+	</bean>
+	<bean id="concurrentSessionFilter" class="org.springframework.security.web.session.ConcurrentSessionFilter">
+		<constructor-arg index="0">
+			<ref bean="sessionRegistry" />
+		</constructor-arg>
+	</bean>
+	<bean id="sessionRegistry" class="org.springframework.security.core.session.SessionRegistryImpl">
+		
+	</bean>	
+		
+	<bean id="headerWriterFilter" class="org.springframework.security.web.header.HeaderWriterFilter">
+	
+	</bean>	
+	<bean id="csrfFilter" class="org.springframework.security.web.csrf.CsrfFilter">
+		<constructor-arg index="0">
+			<ref bean="csrfTokenRepository" />
+		</constructor-arg>	
+	</bean>	
+	<bean id="csrfTokenRepository" class="org.springframework.security.web.csrf.CookieCsrfTokenRepository">
+	
+	</bean>		
+	<bean id="logoutFilter" class="org.springframework.security.web.authentication.logout.LogoutFilter">
+		<constructor-arg index="0">
+			<ref bean="simpleUrlLogoutSuccessHandler" />
+		</constructor-arg>
+	</bean>	
+	<bean id="simpleUrlLogoutSuccessHandler" class="org.springframework.security.web.authentication.logout.SimpleUrlLogoutSuccessHandler">
+	
+	</bean>
+
+	<bean id="usernamePasswordAuthenticationFilter" class="org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter">
+	
+	</bean>
+
+
+
+
+
+
+
+	<bean id="securityMetadataSource" class="org.example.users.services.impl.CustomSecurityMetadataSource">
+		
+	</bean>	
+
+			
+			
+</beans>
