@@ -14,11 +14,13 @@ import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.security.access.ConfigAttribute;
 import org.springframework.security.web.FilterInvocation;
+import org.springframework.security.web.access.intercept.DefaultFilterInvocationSecurityMetadataSource;
 import org.springframework.security.web.access.intercept.FilterInvocationSecurityMetadataSource;
 import org.springframework.security.web.util.matcher.RequestMatcher;
 
 
-public class CustomSecurityMetadataSource implements FilterInvocationSecurityMetadataSource, InitializingBean {
+public class CustomSecurityMetadataSource extends DefaultFilterInvocationSecurityMetadataSource 
+	implements FilterInvocationSecurityMetadataSource, InitializingBean {
 
     protected final Log logger = LogFactory.getLog(getClass());
 
@@ -48,6 +50,7 @@ public class CustomSecurityMetadataSource implements FilterInvocationSecurityMet
     }
     
     public CustomSecurityMetadataSource() {
+    	super(null);
     	Map<RequestMatcher, Collection<ConfigAttribute>> requestMap = new LinkedHashMap<RequestMatcher, Collection<ConfigAttribute>>();
     	this.requestMap = requestMap;
     }

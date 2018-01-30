@@ -30,8 +30,12 @@
 				<ref bean="logoutFilter" />
 				<ref bean="authenticationFilter" />
 				<ref bean="requestCacheAwareFilter" />
-				<ref bean="securityContextHolderAwareRequestFilter" />											
-													
+				<ref bean="securityContextHolderAwareRequestFilter" />
+				
+				
+				<ref bean="sessionManagementFilter" />				
+				<ref bean="exceptionTranslationFilter" />										
+				<ref bean="filterSecurityInterceptor" />													
 			</list>
 		</constructor-arg>
 	</bean>
@@ -51,10 +55,10 @@
 		
 	<bean id="securityContextPersistenceFilter" class="org.springframework.security.web.context.SecurityContextPersistenceFilter">
 		<constructor-arg index="0">
-			<ref bean="repo" />
+			<ref bean="httpSessionSecurityContextRepository" />
 		</constructor-arg>
 	</bean>
-	<bean id="repo" class="org.springframework.security.web.context.HttpSessionSecurityContextRepository">
+	<bean id="httpSessionSecurityContextRepository" class="org.springframework.security.web.context.HttpSessionSecurityContextRepository">
 
 	</bean>	
 	
@@ -240,9 +244,51 @@
 	<bean id="securityContextHolderAwareRequestFilter" class="org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter">
 		
 	</bean>
+	
+	<bean id="sessionManagementFilter" class="org.springframework.security.web.session.SessionManagementFilter">
+		<constructor-arg index="0">
+			<ref bean="httpSessionSecurityContextRepository" />
+		</constructor-arg>
+		<constructor-arg index="1">
+			<ref bean="sessionStrategy" />
+		</constructor-arg>
+		<property name="authenticationFailureHandler" ref="failureHandler"/>
+	</bean>	
+	
+	
+	<bean id="exceptionTranslationFilter" class="org.springframework.security.web.access.ExceptionTranslationFilter">
+		<constructor-arg index="0">
+			<ref bean="loginUrlAuthenticationEntryPoint" />
+		</constructor-arg>
+		<constructor-arg index="1">
+			<ref bean="httpSessionRequestCache" />
+		</constructor-arg>
+	</bean>
+	<bean id="loginUrlAuthenticationEntryPoint" class="org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint">
+		<constructor-arg index="0">
+			<value>/modules/user/login.jsp</value>
+		</constructor-arg>	
+	</bean>	
 
+	<bean id="filterSecurityInterceptor" class="org.springframework.security.web.access.intercept.FilterSecurityInterceptor">
+		<property name="authenticationManager" ref="authenticationManager"/>
+		<property name="securityMetadataSource" ref="securityMetadataSource"/>
+		<property name="accessDecisionManager" ref="affirmativeBased"/>		
+	</bean>	
 
+	<bean id="affirmativeBased" class="org.springframework.security.access.vote.AffirmativeBased">
+		<constructor-arg>
+			<list>
+			 	<ref bean="roleVoter" />   
+			</list>
+		</constructor-arg>
+	</bean>	
+	<bean id="roleVoter" class="org.springframework.security.access.vote.RoleVoter">
+		<property name="rolePrefix" >
+			<value>perm</value>
+		</property>
 
+	</bean>		
 
 	<bean id="securityMetadataSource" class="org.example.users.services.impl.CustomSecurityMetadataSource">
 		
