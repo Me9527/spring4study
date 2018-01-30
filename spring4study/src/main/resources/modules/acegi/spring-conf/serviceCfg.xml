@@ -24,15 +24,18 @@
 		</constructor-arg>
 		<constructor-arg index="1">
 			<list>
+			
 				<ref bean="securityContextPersistenceFilter" />
 				<ref bean="concurrentSessionFilter" />
+				
+				<ref bean="headerWriterFilter" />				
 				<ref bean="csrfFilter" />
 				<ref bean="logoutFilter" />
-				<ref bean="authenticationFilter" />
+				<ref bean="usernamePasswordAuthenticationFilter" />
 				<ref bean="requestCacheAwareFilter" />
 				<ref bean="securityContextHolderAwareRequestFilter" />
-				
-				
+				<ref bean="rememberMeAuthenticationFilter" />				
+				<ref bean="anonymousAuthenticationFilter" />	
 				<ref bean="sessionManagementFilter" />				
 				<ref bean="exceptionTranslationFilter" />										
 				<ref bean="filterSecurityInterceptor" />													
@@ -72,8 +75,42 @@
 	</bean>	
 		
 	<bean id="headerWriterFilter" class="org.springframework.security.web.header.HeaderWriterFilter">
+		<constructor-arg index="0">
+			<ref bean="headerWriterFilterList" />
+		</constructor-arg>	
+	</bean>
+	<bean id="cacheControlHeadersWriter" class="org.springframework.security.web.header.writers.CacheControlHeadersWriter">
 	
 	</bean>	
+	<bean id="hstsHeaderWriter" class="org.springframework.security.web.header.writers.HstsHeaderWriter">
+		<constructor-arg index="0">
+			<value>31536000</value>
+		</constructor-arg>
+		<constructor-arg index="1">
+			<value>true</value>
+		</constructor-arg>	
+	</bean>	
+	<bean id="xXssProtectionHeaderWriter" class="org.springframework.security.web.header.writers.XXssProtectionHeaderWriter">
+	
+	</bean>	
+	<bean id="xFrameOptionsHeaderWriter" class="org.springframework.security.web.header.writers.frameoptions.XFrameOptionsHeaderWriter">
+	
+	</bean>	
+	<bean id="xContentTypeOptionsHeaderWriter" class="org.springframework.security.web.header.writers.XContentTypeOptionsHeaderWriter">
+	
+	</bean>	
+	<util:list id="headerWriterFilterList"  list-class="java.util.ArrayList">
+		<ref bean="cacheControlHeadersWriter" />
+		<ref bean="hstsHeaderWriter" />
+		<ref bean="xXssProtectionHeaderWriter" />
+		<ref bean="xFrameOptionsHeaderWriter" />
+		<ref bean="xContentTypeOptionsHeaderWriter" />		
+	</util:list>
+	
+	
+	
+	
+							
 	<bean id="csrfFilter" class="org.springframework.security.web.csrf.CsrfFilter">
 		<constructor-arg index="0">
 			<ref bean="tokenRepository" />
@@ -118,9 +155,7 @@
 	<bean id="securityContextLogoutHandler" class="org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler">
 	
 	</bean>	
-	<bean id="tokenBasedRememberMeServices" class="org.springframework.security.web.authentication.rememberme.TokenBasedRememberMeServices">
-	
-	</bean>	
+
 	<bean id="cookieClearingLogoutHandler" class="org.springframework.security.web.authentication.logout.CookieClearingLogoutHandler">
 		<constructor-arg index="0">
 			<value>JSESSIONID</value>
@@ -141,7 +176,7 @@
 	
 	
 	
-	<bean id="authenticationFilter" class="org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter">
+	<bean id="usernamePasswordAuthenticationFilter" class="org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter">
 			<property name="authenticationManager" ref="authenticationManager"/>		
 			<property name="requiresAuthenticationRequestMatcher" ref="loginUrl"/>
 			<property name="authenticationFailureHandler" ref="failureHandler"/>
@@ -245,6 +280,37 @@
 		
 	</bean>
 	
+
+	<bean id="anonymousAuthenticationFilter" class="org.springframework.security.web.authentication.AnonymousAuthenticationFilter">
+		<constructor-arg index="0">
+			<value>springAnonymous</value>
+		</constructor-arg>	
+	</bean>		
+
+	<bean id="rememberMeAuthenticationFilter" class="org.springframework.security.web.authentication.rememberme.RememberMeAuthenticationFilter">
+		<constructor-arg index="0">
+			<ref bean="authenticationManager" />
+		</constructor-arg>
+		<constructor-arg index="1">
+			<ref bean="tokenBasedRememberMeServices" />
+		</constructor-arg>
+	</bean>		
+	
+	<bean id="tokenBasedRememberMeServices" class="org.springframework.security.web.authentication.rememberme.TokenBasedRememberMeServices">
+		<constructor-arg index="0">
+			<value>springRemember</value>
+		</constructor-arg>
+		<constructor-arg index="1">
+			<ref bean="custUserDetailService" />
+		</constructor-arg>	
+	</bean>		
+	
+	
+	
+	
+	
+	
+	
 	<bean id="sessionManagementFilter" class="org.springframework.security.web.session.SessionManagementFilter">
 		<constructor-arg index="0">
 			<ref bean="httpSessionSecurityContextRepository" />
@@ -254,8 +320,7 @@
 		</constructor-arg>
 		<property name="authenticationFailureHandler" ref="failureHandler"/>
 	</bean>	
-	
-	
+		
 	<bean id="exceptionTranslationFilter" class="org.springframework.security.web.access.ExceptionTranslationFilter">
 		<constructor-arg index="0">
 			<ref bean="loginUrlAuthenticationEntryPoint" />
