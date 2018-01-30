@@ -29,7 +29,8 @@
 				<ref bean="csrfFilter" />
 				<ref bean="logoutFilter" />
 				<ref bean="authenticationFilter" />
-				<ref bean="requestCacheAwareFilter" />						
+				<ref bean="requestCacheAwareFilter" />
+				<ref bean="securityContextHolderAwareRequestFilter" />											
 													
 			</list>
 		</constructor-arg>
@@ -236,7 +237,9 @@
 		
 	</bean>			
 
-
+	<bean id="securityContextHolderAwareRequestFilter" class="org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter">
+		
+	</bean>
 
 
 
