@@ -28,7 +28,6 @@
 				<ref bean="concurrentSessionFilter" />			
 				<ref bean="csrfFilter" />
 				<ref bean="logoutFilter" />
-				<ref bean="usernamePasswordAuthenticationFilter" />					
 													
 			</list>
 		</constructor-arg>
@@ -48,8 +47,14 @@
 	</bean>
 		
 	<bean id="securityContextPersistenceFilter" class="org.springframework.security.web.context.SecurityContextPersistenceFilter">
-	
+		<constructor-arg index="0">
+			<ref bean="repo" />
+		</constructor-arg>
 	</bean>
+	<bean id="repo" class="org.springframework.security.web.context.HttpSessionSecurityContextRepository">
+
+	</bean>	
+	
 	<bean id="concurrentSessionFilter" class="org.springframework.security.web.session.ConcurrentSessionFilter">
 		<constructor-arg index="0">
 			<ref bean="sessionRegistry" />
@@ -64,21 +69,71 @@
 	</bean>	
 	<bean id="csrfFilter" class="org.springframework.security.web.csrf.CsrfFilter">
 		<constructor-arg index="0">
-			<ref bean="csrfTokenRepository" />
+			<ref bean="tokenRepository" />
 		</constructor-arg>	
 	</bean>	
-	<bean id="csrfTokenRepository" class="org.springframework.security.web.csrf.CookieCsrfTokenRepository">
-	
-	</bean>		
-	<bean id="logoutFilter" class="org.springframework.security.web.authentication.logout.LogoutFilter">
+	<bean id="tokenRepository" class="org.springframework.security.web.csrf.LazyCsrfTokenRepository">
 		<constructor-arg index="0">
-			<ref bean="simpleUrlLogoutSuccessHandler" />
-		</constructor-arg>
-	</bean>	
-	<bean id="simpleUrlLogoutSuccessHandler" class="org.springframework.security.web.authentication.logout.SimpleUrlLogoutSuccessHandler">
+			<ref bean="delegateCsrfTokenRepository" />
+		</constructor-arg>		
+	</bean>
+	<bean id="delegateCsrfTokenRepository" class="org.springframework.security.web.csrf.HttpSessionCsrfTokenRepository">
 	
 	</bean>
+	
+	
+	<bean id="logoutFilter" class="org.springframework.security.web.authentication.logout.LogoutFilter">
+		<constructor-arg index="0">
+			<ref bean="logoutSuccessHandler" />
+		</constructor-arg>
+		<constructor-arg index="1">
+			<ref bean="compositeLogoutHandler" />
+		</constructor-arg>
+		<property name="logoutRequestMatcher" ref="logoutUrl"/>			
+	</bean>	
+	<bean id="logoutSuccessHandler" class="org.springframework.security.web.authentication.logout.SimpleUrlLogoutSuccessHandler">
+	 		<property name="defaultTargetUrl" value="/modules/user/logout.jsp"/>
+	</bean>
 
+	<bean id="logoutUrl" class="org.springframework.security.web.util.matcher.AntPathRequestMatcher">
+		<constructor-arg index="0">
+			<value>"/modules/user/logout"</value>
+		</constructor-arg>
+		<constructor-arg index="1">
+			<value>POST</value>
+		</constructor-arg>		
+	</bean>
+	<bean id="csrfLogoutHandler" class="org.springframework.security.web.csrf.CsrfLogoutHandler">
+		<constructor-arg index="0">
+			<ref bean="tokenRepository" />
+		</constructor-arg>	
+	</bean>	
+	<bean id="securityContextLogoutHandler" class="org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler">
+	
+	</bean>	
+	<bean id="tokenBasedRememberMeServices" class="org.springframework.security.web.authentication.rememberme.TokenBasedRememberMeServices">
+	
+	</bean>	
+	<bean id="cookieClearingLogoutHandler" class="org.springframework.security.web.authentication.logout.CookieClearingLogoutHandler">
+		<constructor-arg index="0">
+			<value>"JSESSIONID"</value>
+		</constructor-arg>
+	</bean>
+	<util:list id="compositeLogoutHandlerList"  list-class="java.util.ArrayList">
+		<ref bean="csrfLogoutHandler" />
+		<ref bean="securityContextLogoutHandler" />
+		<ref bean="cookieClearingLogoutHandler" />
+	</util:list>	
+	<bean id="compositeLogoutHandler" class="org.springframework.security.web.authentication.logout.CompositeLogoutHandler">
+		<constructor-arg index="0">
+			<ref bean="compositeLogoutHandlerList" />
+		</constructor-arg>	
+	</bean>	
+
+	
+	
+	
+	
 	<bean id="usernamePasswordAuthenticationFilter" class="org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter">
 	
 	</bean>
