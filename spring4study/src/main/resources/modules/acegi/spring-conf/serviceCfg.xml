@@ -25,9 +25,11 @@
 		<constructor-arg index="1">
 			<list>
 				<ref bean="securityContextPersistenceFilter" />
-				<ref bean="concurrentSessionFilter" />			
+				<ref bean="concurrentSessionFilter" />
 				<ref bean="csrfFilter" />
 				<ref bean="logoutFilter" />
+				<ref bean="authenticationFilter" />
+				<ref bean="requestCacheAwareFilter" />						
 													
 			</list>
 		</constructor-arg>
@@ -97,7 +99,7 @@
 
 	<bean id="logoutUrl" class="org.springframework.security.web.util.matcher.AntPathRequestMatcher">
 		<constructor-arg index="0">
-			<value>"/modules/user/logout"</value>
+			<value>/modules/user/logout</value>
 		</constructor-arg>
 		<constructor-arg index="1">
 			<value>POST</value>
@@ -116,7 +118,7 @@
 	</bean>	
 	<bean id="cookieClearingLogoutHandler" class="org.springframework.security.web.authentication.logout.CookieClearingLogoutHandler">
 		<constructor-arg index="0">
-			<value>"JSESSIONID"</value>
+			<value>JSESSIONID</value>
 		</constructor-arg>
 	</bean>
 	<util:list id="compositeLogoutHandlerList"  list-class="java.util.ArrayList">
@@ -134,10 +136,105 @@
 	
 	
 	
-	<bean id="usernamePasswordAuthenticationFilter" class="org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter">
-	
+	<bean id="authenticationFilter" class="org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter">
+			<property name="authenticationManager" ref="authenticationManager"/>		
+			<property name="requiresAuthenticationRequestMatcher" ref="loginUrl"/>
+			<property name="authenticationFailureHandler" ref="failureHandler"/>
+			<property name="sessionAuthenticationStrategy" ref="sessionStrategy"/>
 	</bean>
 
+	<bean id="loginUrl" class="org.springframework.security.web.util.matcher.AntPathRequestMatcher">
+		<constructor-arg index="0">
+			<value>/modules/user/login</value>
+		</constructor-arg>
+		<constructor-arg index="1">
+			<value>POST</value>
+		</constructor-arg>		
+	</bean>
+	<bean id="failureHandler" class="org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler">
+		<property name="defaultFailureUrl" value="/modules/user/login.jsp"/>	
+	</bean>	
+
+	<bean id="encoder" class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder"/>	
+	<bean id="daoAuthenticationProvider" class="org.springframework.security.authentication.dao.DaoAuthenticationProvider">
+		<property name="userDetailsService" ref="custUserDetailService"/>		
+		<property name="passwordEncoder" ref="encoder"/>				
+	</bean>
+	<util:list id="daoAuthenticationProviderList"  list-class="java.util.ArrayList">
+		<ref bean="daoAuthenticationProvider" />
+	</util:list>	
+	<bean id="daoAuthenticationProviderDelegate" class="org.springframework.security.authentication.ProviderManager">
+		<constructor-arg index="0">
+			<ref bean="daoAuthenticationProviderList" />
+		</constructor-arg>		
+	</bean>
+	
+	<bean id="rememberMeAuthenticationProvider" class="org.springframework.security.authentication.RememberMeAuthenticationProvider">
+		<constructor-arg index="0">
+			<value>rememberMe</value>
+		</constructor-arg>	
+	</bean>	
+	<bean id="anonymousAuthenticationProvider" class="org.springframework.security.authentication.AnonymousAuthenticationProvider">
+		<constructor-arg index="0">
+			<value>anonymous</value>
+		</constructor-arg>		
+	</bean>	
+	<util:list id="authenticationProviderList"  list-class="java.util.ArrayList">
+		<ref bean="rememberMeAuthenticationProvider" />
+		<ref bean="anonymousAuthenticationProvider" />
+	</util:list>
+	<bean id="authenticationManager" class="org.springframework.security.authentication.ProviderManager">
+		<constructor-arg index="0">
+			<ref bean="authenticationProviderList" />
+		</constructor-arg>
+		<constructor-arg index="1">
+			<ref bean="daoAuthenticationProviderDelegate" />
+		</constructor-arg>					
+	</bean>	
+	
+	
+				
+	<bean id="csrfAuthenticationStrategy" class="org.springframework.security.web.csrf.CsrfAuthenticationStrategy">
+		<constructor-arg index="0">
+			<ref bean="tokenRepository" />
+		</constructor-arg>
+	</bean>
+	<bean id="concurrentSessionControlAuthenticationStrategy" class="org.springframework.security.web.authentication.session.ConcurrentSessionControlAuthenticationStrategy">
+		<constructor-arg index="0">
+			<ref bean="sessionRegistry" />
+		</constructor-arg>
+	</bean>
+	<bean id="changeSessionIdAuthenticationStrategy" class="org.springframework.security.web.authentication.session.ChangeSessionIdAuthenticationStrategy">
+	
+	</bean>
+	<bean id="registerSessionAuthenticationStrategy" class="org.springframework.security.web.authentication.session.RegisterSessionAuthenticationStrategy">
+		<constructor-arg index="0">
+			<ref bean="sessionRegistry" />
+		</constructor-arg>
+	</bean>
+	<util:list id="compositeSessionAuthenticationStrategy"  list-class="java.util.ArrayList">
+		<ref bean="csrfAuthenticationStrategy" />
+		<ref bean="concurrentSessionControlAuthenticationStrategy" />
+		<ref bean="changeSessionIdAuthenticationStrategy" />		
+		<ref bean="registerSessionAuthenticationStrategy" />
+	</util:list>	
+	<bean id="sessionStrategy" class="org.springframework.security.web.authentication.session.CompositeSessionAuthenticationStrategy">
+		<constructor-arg index="0">
+			<ref bean="compositeSessionAuthenticationStrategy" />
+		</constructor-arg>
+	</bean>
+	
+
+
+	<bean id="requestCacheAwareFilter" class="org.springframework.security.web.savedrequest.RequestCacheAwareFilter">
+		<constructor-arg index="0">
+			<ref bean="httpSessionRequestCache" />
+		</constructor-arg>
+	</bean>	
+
+	<bean id="httpSessionRequestCache" class="org.springframework.security.web.savedrequest.HttpSessionRequestCache">
+		
+	</bean>			
 
 
 
