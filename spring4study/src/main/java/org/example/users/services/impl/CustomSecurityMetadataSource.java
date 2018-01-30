@@ -1,5 +1,6 @@
 package org.example.users.services.impl;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
@@ -13,9 +14,11 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.security.access.ConfigAttribute;
+import org.springframework.security.access.SecurityConfig;
 import org.springframework.security.web.FilterInvocation;
 import org.springframework.security.web.access.intercept.DefaultFilterInvocationSecurityMetadataSource;
 import org.springframework.security.web.access.intercept.FilterInvocationSecurityMetadataSource;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.security.web.util.matcher.RequestMatcher;
 
 
@@ -53,6 +56,15 @@ public class CustomSecurityMetadataSource extends DefaultFilterInvocationSecurit
     	super(null);
     	Map<RequestMatcher, Collection<ConfigAttribute>> requestMap = new LinkedHashMap<RequestMatcher, Collection<ConfigAttribute>>();
     	this.requestMap = requestMap;
+    	
+    	
+    	AntPathRequestMatcher m1 = new AntPathRequestMatcher("/modules/module01/**");
+    	Collection<ConfigAttribute> c1 = new ArrayList<ConfigAttribute>();
+    	SecurityConfig sc = new SecurityConfig(rolePrefix + "supervisor");
+//    	WebExpressionConfigAttribute a1 = new WebExpressionConfigAttribute(null, null);
+    	c1.add(sc);
+    	this.requestMap.put(m1, c1);
+    	
     }
 
     public Collection<ConfigAttribute> getAllConfigAttributes() {

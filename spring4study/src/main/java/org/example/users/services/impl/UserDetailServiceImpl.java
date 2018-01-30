@@ -23,7 +23,7 @@ import org.springframework.util.Assert;
 @Service("custUserDetailService")
 public class UserDetailServiceImpl implements UserDetailsService, MessageSourceAware{
 	
-	private String rolePrefix = "";
+	private String rolePrefix = "perm";
 	private boolean usernameBasedPrimaryKey = true;
 	private boolean enableAuthorities = true;
 	private boolean enableGroups;

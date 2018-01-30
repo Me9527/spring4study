@@ -28,7 +28,7 @@ public class UserDetailDAOImpl extends JdbcDaoSupport implements IUserDetailDAO 
 	private String usersByUsernameQuery = "select LOGINNAME,PASSWORD,ENABLED from users where LOGINNAME = ?";
 	private String authoritiesByUsernameQuery = "select LOGINNAME, AUTHORITY from authorities where LOGINNAME = ?";
 //	private String groupAuthoritiesByUsernameQuery;
-	private String rolePrefix = "";
+	private String rolePrefix = "perm_";
 	private boolean enableAuthorities = true;
 	private boolean enableGroups;
 
