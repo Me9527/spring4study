@@ -107,9 +107,6 @@
 		<ref bean="xContentTypeOptionsHeaderWriter" />		
 	</util:list>
 	
-	
-	
-	
 							
 	<bean id="csrfFilter" class="org.springframework.security.web.csrf.CsrfFilter">
 		<constructor-arg index="0">
@@ -174,8 +171,6 @@
 
 	
 	
-	
-	
 	<bean id="usernamePasswordAuthenticationFilter" class="org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter">
 			<property name="authenticationManager" ref="authenticationManager"/>		
 			<property name="requiresAuthenticationRequestMatcher" ref="loginUrl"/>
@@ -209,6 +204,7 @@
 		</constructor-arg>		
 	</bean>
 	
+	
 	<bean id="rememberMeAuthenticationProvider" class="org.springframework.security.authentication.RememberMeAuthenticationProvider">
 		<constructor-arg index="0">
 			<value>rememberMe</value>
@@ -219,6 +215,7 @@
 			<value>anonymous</value>
 		</constructor-arg>		
 	</bean>	
+	
 	<util:list id="authenticationProviderList"  list-class="java.util.ArrayList">
 		<ref bean="rememberMeAuthenticationProvider" />
 		<ref bean="anonymousAuthenticationProvider" />
@@ -304,10 +301,6 @@
 			<ref bean="custUserDetailService" />
 		</constructor-arg>	
 	</bean>		
-	
-	
-	
-	
 	
 	
 	
