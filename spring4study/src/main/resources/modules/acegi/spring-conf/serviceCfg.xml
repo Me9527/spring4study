@@ -330,7 +330,7 @@
 
 	<bean id="filterSecurityInterceptor" class="org.springframework.security.web.access.intercept.FilterSecurityInterceptor">
 		<property name="authenticationManager" ref="authenticationManager"/>
-		<property name="securityMetadataSource" ref="securityMetadataSource"/>
+		<property name="securityMetadataSource" ref="securityUrlMetadataSource"/>
 		<property name="accessDecisionManager" ref="affirmativeBased"/>		
 	</bean>	
 
@@ -348,10 +348,25 @@
 
 	</bean>		
 
-	<bean id="securityMetadataSource" class="org.example.users.services.impl.CustomSecurityMetadataSource">
+	<bean id="securityUrlMetadataSource" class="org.example.users.services.impl.CustomSecurityMetadataSource">
 		
 	</bean>	
 
+	<bean id="securityMethodMetadataSource" class="org.example.users.services.impl.CustomSecurityMethodMetadataSource">
+		
+	</bean>	
+	
+	<bean id="methodSecurityInterceptor" class="org.springframework.security.access.intercept.aopalliance.MethodSecurityInterceptor">
+		<property name="authenticationManager" ref="authenticationManager"/>
+		<property name="securityMetadataSource" ref="securityMethodMetadataSource"/>
+		<property name="accessDecisionManager" ref="affirmativeBased"/>		
+	</bean>	
 			
-			
+	<aop:config proxy-target-class="false">
+		<aop:pointcut id="methodSecurity" expression="execution(* org.example.module02..*ServiceImpl.*(..))" />
+		<aop:advisor advice-ref="methodSecurityInterceptor" pointcut-ref="methodSecurity" />
+	</aop:config>
+		
+		
+		
 </beans>
