@@ -314,6 +314,9 @@
 		<property name="authenticationFailureHandler" ref="failureHandler"/>
 	</bean>	
 		
+	<bean id="accessDeniedHandler" class="org.springframework.security.web.access.AccessDeniedHandlerImpl">
+		<property name="errorPage" value="/modules/user/accessDeniedHandler.jsp"/>
+	</bean>			
 	<bean id="exceptionTranslationFilter" class="org.springframework.security.web.access.ExceptionTranslationFilter">
 		<constructor-arg index="0">
 			<ref bean="loginUrlAuthenticationEntryPoint" />
@@ -321,6 +324,7 @@
 		<constructor-arg index="1">
 			<ref bean="httpSessionRequestCache" />
 		</constructor-arg>
+		<property name="accessDeniedHandler" ref="accessDeniedHandler"/>
 	</bean>
 	<bean id="loginUrlAuthenticationEntryPoint" class="org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint">
 		<constructor-arg index="0">

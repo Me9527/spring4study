@@ -1,7 +1,5 @@
 package org.example.users.services.impl;
 
-import java.util.List;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.security.access.method.MapBasedMethodSecurityMetadataSource;
@@ -13,7 +11,6 @@ public class CustomSecurityMethodMetadataSource extends MapBasedMethodSecurityMe
 
 //	private ICommonDAO commonDAO;
     private String rolePrefix = "perm_";
-    private List<String> excludeUrls;
     
     public void afterPropertiesSet() throws java.lang.Exception{
 //		String hql = "from " + BResourcePermission.class.getSimpleName() ; 
