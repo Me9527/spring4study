@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 //TODO mike module02.web 下不能存在同名的ActionOne类问题。
 @Controller
+@RequestMapping("/modules/module01/ActionOne")
 public class ActionOne {
 
 	private Integer abc;

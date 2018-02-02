@@ -42,3 +42,25 @@ create table authorities (
 );
 create unique index ix_auth_username on authorities (username,authority);
 
+
+AuthenticationConfigBuilder.java
+	private String createKey() {
+		SecureRandom random = new SecureRandom();
+		return Long.toString(random.nextLong());
+	}
+
+org.springframework.security.access.annotation.SecuredAnnotationSecurityMetadataSource
+org.springframework.security.access.method.MapBasedMethodSecurityMetadataSource
+
+
+SELECT * FROM spring.authorities;
+
+SELECT * FROM spring.authorities for update;
+insert into authorities values('zhubajie', 'teller')
+commit;
+
+update  spring.authorities set authority = 'supervisor' where LOGINNAME = 'shunwukong';
+delete from authorities a WHERE a.LOGINNAME = 'shunwukong';
+SET SQL_SAFE_UPDATES = 0;
+
+	

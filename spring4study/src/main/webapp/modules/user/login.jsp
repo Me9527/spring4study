@@ -30,7 +30,7 @@
 	</form>
 	
 	<script type="text/javascript">
-		alert("${_csrf.token}");
+		//alert("${_csrf.token}");
 	</script>
 </body>
 </html>

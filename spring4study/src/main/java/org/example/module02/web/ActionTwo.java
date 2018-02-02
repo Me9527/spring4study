@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
+@RequestMapping("/modules/module02")
 public class ActionTwo {
 
 	private Integer abc;
@@ -47,7 +48,7 @@ public class ActionTwo {
 	public String aabbcc(@RequestParam(value = "username", required = false, defaultValue = "钟馗") String username,
 			Model model) {
 		
-		model.addAttribute("username", username);
+		bizTwo.addBiz01(username);
 		System.out.println("aabbcc");
 		return "aabbcc";
 	}
