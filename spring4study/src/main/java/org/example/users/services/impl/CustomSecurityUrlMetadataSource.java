@@ -22,7 +22,7 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.security.web.util.matcher.RequestMatcher;
 
 
-public class CustomSecurityMetadataSource extends DefaultFilterInvocationSecurityMetadataSource 
+public class CustomSecurityUrlMetadataSource extends DefaultFilterInvocationSecurityMetadataSource 
 	implements FilterInvocationSecurityMetadataSource, InitializingBean {
 
     protected final Log logger = LogFactory.getLog(getClass());
@@ -52,7 +52,7 @@ public class CustomSecurityMetadataSource extends DefaultFilterInvocationSecurit
 //		}
     }
     
-    public CustomSecurityMetadataSource() {
+    public CustomSecurityUrlMetadataSource() {
     	super(null);
     	Map<RequestMatcher, Collection<ConfigAttribute>> requestMap = new LinkedHashMap<RequestMatcher, Collection<ConfigAttribute>>();
     	this.requestMap = requestMap;

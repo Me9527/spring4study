@@ -352,17 +352,25 @@
 
 	</bean>		
 
-	<bean id="securityUrlMetadataSource" class="org.example.users.services.impl.CustomSecurityMetadataSource">
+	<bean id="securityUrlMetadataSource" class="org.example.users.services.impl.CustomSecurityUrlMetadataSource">
 		
 	</bean>	
 
 	<bean id="securityMethodMetadataSource" class="org.example.users.services.impl.CustomSecurityMethodMetadataSource">
 		
 	</bean>	
+
+	<bean id="delegatingMethodSecurityMetadataSource" class="org.springframework.security.access.method.DelegatingMethodSecurityMetadataSource">
+		<constructor-arg>
+			<list>
+			 	<ref bean="securityMethodMetadataSource" />   
+			</list>
+		</constructor-arg>
+	</bean>		
 	
 	<bean id="methodSecurityInterceptor" class="org.springframework.security.access.intercept.aopalliance.MethodSecurityInterceptor">
 		<property name="authenticationManager" ref="authenticationManager"/>
-		<property name="securityMetadataSource" ref="securityMethodMetadataSource"/>
+		<property name="securityMetadataSource" ref="delegatingMethodSecurityMetadataSource"/>
 		<property name="accessDecisionManager" ref="affirmativeBased"/>		
 	</bean>	
 			

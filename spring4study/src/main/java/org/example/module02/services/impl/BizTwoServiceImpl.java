@@ -7,6 +7,7 @@ import org.apache.log4j.Logger;
 import org.example.module02.services.IBizTwo;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Service;
 
 // @Component、@Repository、@Service
@@ -47,6 +48,7 @@ public class BizTwoServiceImpl implements IBizTwo {
 	}
 
 	@Override
+	@Secured("IS_AUTHENTICATED_ANONYMOUSLY")
 	public List<Map<String, Object>> getBiz01(String param) {
 		String query = "select id, name from test_user";
 		List<Map<String, Object>> rs = jdbcTemplate.queryForList(query);
@@ -55,6 +57,7 @@ public class BizTwoServiceImpl implements IBizTwo {
 	}
 
 	@Override
+	@Secured("ROLE_TELLER")
 	public void addBiz01(String param) {
 		String insert = "insert into test_user (name) values (?)";
 		logger.info(param);
